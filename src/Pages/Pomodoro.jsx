@@ -1,37 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import BackButton from '../Components/BackButton';
+import './Pomodoro.css';
 
 function Pomodoro() {
-  const [endTime, setEndTime] = useState(() => {
-    const saved = localStorage.getItem('pomodoro_endTime');
-    return saved ? Number(saved) : null;
-  });
-
-  const [running, setRunning] = useState(() => {
-    const saved = localStorage.getItem('pomodoro_running');
-    return saved === 'true';
-  });
-
-  const [hasStarted, setHasStarted] = useState(() => {
-    return localStorage.getItem('pomodoro_hasStarted') === 'true';
-  });
-
-  const [duration, setDuration] = useState(() => {
-    const saved = localStorage.getItem('pomodoro_duration');
-    return saved ? Number(saved) : 25 * 60; // default 25 min
-  });
-
+  const [endTime, setEndTime] = useState(() => Number(localStorage.getItem('pomodoro_endTime')) || null);
+  const [running, setRunning] = useState(() => localStorage.getItem('pomodoro_running') === 'true');
+  const [hasStarted, setHasStarted] = useState(() => localStorage.getItem('pomodoro_hasStarted') === 'true');
+  const [duration, setDuration] = useState(() => Number(localStorage.getItem('pomodoro_duration')) || 25 * 60);
   const [now, setNow] = useState(Date.now());
 
-  // Atualiza o tempo a cada segundo
   useEffect(() => {
-    const interval = setInterval(() => {
-      setNow(Date.now());
-    }, 1000);
+    const interval = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(interval);
   }, []);
 
-  // Atualiza localStorage sempre que necessário
   useEffect(() => {
     if (running) {
       localStorage.setItem('pomodoro_endTime', endTime);
@@ -42,8 +24,13 @@ function Pomodoro() {
   }, [running, endTime, duration]);
 
   const getRemainingSeconds = () => {
-    if (!endTime) return duration;
-    return Math.max(0, Math.floor((endTime - now) / 1000));
+    return endTime ? Math.max(0, Math.floor((endTime - now) / 1000)) : duration;
+  };
+
+  const formatTime = (s) => {
+    const m = String(Math.floor(s / 60)).padStart(2, '0');
+    const sec = String(s % 60).padStart(2, '0');
+    return `${m}:${sec}`;
   };
 
   const startTimer = () => {
@@ -51,10 +38,6 @@ function Pomodoro() {
     setEndTime(end);
     setRunning(true);
     setHasStarted(true);
-    localStorage.setItem('pomodoro_running', 'true');
-    localStorage.setItem('pomodoro_hasStarted', 'true');
-    localStorage.setItem('pomodoro_endTime', end);
-    localStorage.setItem('pomodoro_duration', duration);
   };
 
   const pauseTimer = () => {
@@ -62,16 +45,11 @@ function Pomodoro() {
     setRunning(false);
     setDuration(remaining);
     setEndTime(null);
-    localStorage.setItem('pomodoro_running', 'false');
-    localStorage.setItem('pomodoro_duration', remaining);
   };
 
   const resumeTimer = () => {
-    const newEnd = Date.now() + duration * 1000;
-    setEndTime(newEnd);
+    setEndTime(Date.now() + duration * 1000);
     setRunning(true);
-    localStorage.setItem('pomodoro_endTime', newEnd);
-    localStorage.setItem('pomodoro_running', 'true');
   };
 
   const resetTimer = () => {
@@ -79,47 +57,39 @@ function Pomodoro() {
     setHasStarted(false);
     setEndTime(null);
     setDuration(25 * 60);
-    localStorage.removeItem('pomodoro_running');
-    localStorage.removeItem('pomodoro_endTime');
-    localStorage.removeItem('pomodoro_hasStarted');
-    localStorage.removeItem('pomodoro_duration');
-  };
-
-  const formatTime = (seconds) => {
-    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-    const s = String(seconds % 60).padStart(2, '0');
-    return `${m}:${s}`;
+    localStorage.clear();
   };
 
   const remaining = getRemainingSeconds();
 
   return (
-    <div>
+    <div className="pomodoro-container">
       <BackButton />
-      <h1>⏱️ Pomodoro</h1>
+      <h1 className="pomodoro-title">⏱️ Pomodoro</h1>
 
       {!hasStarted ? (
-        <div style={{ marginTop: '1rem' }}>
-          <label>Minutos: </label>
+        <div className="setup-section">
+          <label htmlFor="durationInput">Minutos:</label>
           <input
+            id="durationInput"
             type="number"
             min={1}
             value={duration / 60}
             onChange={(e) => setDuration(Number(e.target.value) * 60)}
-            style={{ padding: '8px', borderRadius: '8px', width: '60px', marginRight: '10px' }}
+            className="duration-input"
           />
-          <button onClick={startTimer}>Iniciar</button>
+          <button className="start-button" onClick={startTimer}>🎯 Iniciar</button>
         </div>
       ) : (
-        <>
-          <h2 style={{ fontSize: '3rem', margin: '1rem 0' }}>{formatTime(remaining)}</h2>
-          <button onClick={running ? pauseTimer : resumeTimer}>
-            {running ? 'Pausar' : 'Continuar'}
-          </button>
-          <button onClick={resetTimer} style={{ marginLeft: '10px' }}>
-            Resetar
-          </button>
-        </>
+        <div className="timer-section">
+          <h2 className="time-display">{formatTime(remaining)}</h2>
+          <div className="timer-buttons">
+            <button onClick={running ? pauseTimer : resumeTimer}>
+              {running ? '⏸️ Pausar' : '▶️ Continuar'}
+            </button>
+            <button onClick={resetTimer}>🔄 Resetar</button>
+          </div>
+        </div>
       )}
     </div>
   );

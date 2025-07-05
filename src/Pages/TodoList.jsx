@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TodoItem from './TodoItem';
 import BackButton from '../Components/BackButton';
-
+import './TodoList.css'; // Importa o CSS novo
 
 function TodoList({ tasks, setTasks }) {
   const [input, setInput] = useState('');
@@ -9,12 +9,13 @@ function TodoList({ tasks, setTasks }) {
 
   const addTask = () => {
     if (!input.trim()) return;
-    setTasks([...tasks, {
+    const newTask = {
       id: Date.now(),
       text: input,
       done: false,
       createdAt: new Date()
-    }]);
+    };
+    setTasks([...tasks, newTask]);
     setInput('');
   };
 
@@ -23,28 +24,37 @@ function TodoList({ tasks, setTasks }) {
   );
 
   return (
-    <div>
-      <input
-  className="todo-input"
-  placeholder="Adicione uma nova tarefa..."
-  value={input}
-  onChange={e => setInput(e.target.value)}
-/>
-<button className="add-button" onClick={addTask}>➕</button>
-      <div className="filter-container">
-  <label>Filtro: </label>
-  <select className="todo-filter" onChange={e => setFilter(e.target.value)}>
-    <option value="all">📋 Todas</option>
-    <option value="done">✅ Completas</option>
-    <option value="todo">🕓 Pendentes</option>
-  </select>
-</div>
-      <ul>
+    <div className="todo-container">
+      <h2 className="todo-title">📘 Minhas Tarefas</h2>
+      <div className="input-group">
+        <input
+          className="todo-input"
+          placeholder="Escreva sua tarefa aqui..."
+          value={input}
+          onChange={e => setInput(e.target.value)}
+        />
+        <button className="add-button" onClick={addTask}>➕ Adicionar</button>
+      </div>
+
+      <div className="filter-group">
+        <label htmlFor="taskFilter">Filtro:</label>
+        <select
+          id="taskFilter"
+          className="todo-filter"
+          onChange={e => setFilter(e.target.value)}
+        >
+          <option value="all">📋 Todas</option>
+          <option value="done">✅ Completas</option>
+          <option value="todo">🕓 Pendentes</option>
+        </select>
+      </div>
+
+      <ul className="task-list">
         {filteredTasks.map(task => (
           <TodoItem key={task.id} task={task} setTasks={setTasks} />
-          
         ))}
       </ul>
+
       <BackButton />
     </div>
   );

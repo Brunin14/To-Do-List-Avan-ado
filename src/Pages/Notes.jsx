@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import BackButton from '../Components/BackButton';
+import './Notes.css';
 
 function Notes() {
   const [notes, setNotes] = useState(() => {
@@ -45,38 +46,43 @@ function Notes() {
   };
 
   return (
-    <div>
+    <div className="notes-container">
       <BackButton />
-      <h1>📝 Caderno de Mensagens</h1>
-      <textarea
-        value={newNote}
-        onChange={e => setNewNote(e.target.value)}
-        placeholder="Escreva sua mensagem..."
-        rows={4}
-        className="note-textarea"
-      />
-      <button onClick={addNote}>Salvar</button>
+      <h1 className="notes-title">📝 Caderno de Mensagens</h1>
+
+      <div className="note-form">
+        <textarea
+          value={newNote}
+          onChange={(e) => setNewNote(e.target.value)}
+          placeholder="Escreva sua mensagem..."
+          rows={4}
+          className="note-textarea"
+        />
+        <button onClick={addNote} className="note-button">💾 Salvar</button>
+      </div>
 
       <div className="note-history">
         {notes.map((note, idx) => (
           <div key={idx} className="note-card">
             {editingIndex === idx ? (
-              <>
+              <div className="edit-section">
                 <textarea
                   value={editText}
-                  onChange={e => setEditText(e.target.value)}
+                  onChange={(e) => setEditText(e.target.value)}
                   rows={4}
                   className="note-edit-textarea"
                 />
-                <button onClick={saveEdit}>💾 Salvar</button>
-              </>
+                <button onClick={saveEdit} className="note-button">✅ Confirmar</button>
+              </div>
             ) : (
-              <>
-                <p>{note.text}</p>
-                <small>📅 {note.timestamp}</small><br />
-                <button onClick={() => startEdit(idx)}>✏️ Editar</button>
-                <button onClick={() => deleteNote(idx)} style={{ backgroundColor: '#dc3545', marginLeft: '10px' }}>🗑️ Excluir</button>
-              </>
+              <div className="view-section">
+                <p className="note-text">{note.text}</p>
+                <small className="note-timestamp">📅 {note.timestamp}</small>
+                <div className="note-actions">
+                  <button className="edit-button" onClick={() => startEdit(idx)}>✏️ Editar</button>
+                  <button className="delete-button" onClick={() => deleteNote(idx)}>🗑️ Excluir</button>
+                </div>
+              </div>
             )}
           </div>
         ))}

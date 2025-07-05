@@ -1,0 +1,159 @@
+:root {
+  --primary: #007bff;
+  --primary-dark: #0056b3;
+  --danger: #dc3545;
+  --background: #f4f8ff;
+  --card-bg: #ffffff;
+  --text: #333;
+  --text-muted: #666;
+  --radius: 12px;
+  --font: 'Inter', sans-serif;
+}
+
+/* 🌙 Modo escuro */
+body.dark-mode {
+  --primary: #66aaff;
+  --primary-dark: #3a6db3;
+  --danger: #ff5f5f;
+  --background: #1a1a1d;
+  --card-bg: #28282b;
+  --text: #f0f0f0;
+  --text-muted: #aaaaaa;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+  font-family: var(--font);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Container principal */
+.notes-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Título */
+.notes-title {
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--primary-dark);
+}
+
+/* Formulário */
+.note-form {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.note-textarea,
+.note-edit-textarea {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  resize: vertical;
+  background-color: var(--background);
+  color: var(--text);
+}
+
+/* Botão principal */
+.note-button {
+  padding: 10px 16px;
+  background-color: var(--primary);
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.note-button:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Histórico de notas */
+.note-history {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.note-card {
+  background-color: var(--background);
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Conteúdo da nota */
+.note-text {
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.note-timestamp {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Ações */
+.note-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.note-actions .edit-button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.note-actions .edit-button:hover {
+  background-color: var(--primary-dark);
+}
+
+.note-actions .delete-button {
+  background-color: var(--danger);
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.note-actions .delete-button:hover {
+  background-color: #b92c2c;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .note-actions {
+    flex-direction: column;
+  }
+
+  .note-actions button {
+    width: 100%;
+  }
+}

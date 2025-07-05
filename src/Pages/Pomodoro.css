@@ -1,0 +1,104 @@
+:root {
+  --primary: #007bff;
+  --primary-dark: #0056b3;
+  --text: #333;
+  --background: #f0f8ff;
+  --card: #ffffff;
+  --radius: 12px;
+  --font: 'Inter', sans-serif;
+}
+
+.pomodoro-container {
+  background-color: var(--background);
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 500px;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  font-family: var(--font);
+  color: var(--text);
+}
+
+.pomodoro-title {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--primary-dark);
+  margin-bottom: 1rem;
+}
+
+.setup-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.duration-input {
+  padding: 10px;
+  width: 80px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+}
+
+.start-button {
+  padding: 10px 14px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.start-button:hover {
+  background-color: var(--primary-dark);
+}
+
+.timer-section {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.time-display {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.timer-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.timer-buttons button {
+  padding: 10px 16px;
+  font-size: 1rem;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  background-color: var(--primary);
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.timer-buttons button:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .setup-section,
+  .timer-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .start-button,
+  .timer-buttons button {
+    width: 100%;
+  }
+}
