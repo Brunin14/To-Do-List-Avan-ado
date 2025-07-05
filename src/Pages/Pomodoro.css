@@ -14,7 +14,7 @@
   margin: 2rem auto;
   max-width: 500px;
   border-radius: var(--radius);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 24px rgb(134, 159, 184);
   font-family: var(--font);
   color: var(--text);
 }
