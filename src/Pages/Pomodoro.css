@@ -9,7 +9,7 @@
 }
 
 .pomodoro-container {
-  background-color: var(--background);
+  background-color: white;
   padding: 2rem;
   margin: 2rem auto;
   max-width: 500px;
