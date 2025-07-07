@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../Context/AuthContext';
 import BackButton from '../Components/BackButton';
 import './Pomodoro.css';
 
 function Pomodoro() {
-  const [endTime, setEndTime] = useState(() => Number(localStorage.getItem('pomodoro_endTime')) || null);
-  const [running, setRunning] = useState(() => localStorage.getItem('pomodoro_running') === 'true');
-  const [hasStarted, setHasStarted] = useState(() => localStorage.getItem('pomodoro_hasStarted') === 'true');
-  const [duration, setDuration] = useState(() => Number(localStorage.getItem('pomodoro_duration')) || 25 * 60);
+  const { usuario } = useContext(AuthContext);
+  const storagePrefix = `pomodoro_${usuario?.email || 'anonimo'}_`;
+
+  const [endTime, setEndTime] = useState(() => Number(localStorage.getItem(storagePrefix + 'endTime')) || null);
+  const [running, setRunning] = useState(() => localStorage.getItem(storagePrefix + 'running') === 'true');
+  const [hasStarted, setHasStarted] = useState(() => localStorage.getItem(storagePrefix + 'hasStarted') === 'true');
+  const [duration, setDuration] = useState(() => Number(localStorage.getItem(storagePrefix + 'duration')) || 25 * 60);
   const [now, setNow] = useState(Date.now());
 
   useEffect(() => {
@@ -15,13 +19,14 @@ function Pomodoro() {
   }, []);
 
   useEffect(() => {
+    localStorage.setItem(storagePrefix + 'running', running ? 'true' : 'false');
+    localStorage.setItem(storagePrefix + 'hasStarted', hasStarted ? 'true' : 'false');
+    localStorage.setItem(storagePrefix + 'duration', duration.toString());
+
     if (running) {
-      localStorage.setItem('pomodoro_endTime', endTime);
-      localStorage.setItem('pomodoro_running', 'true');
-      localStorage.setItem('pomodoro_hasStarted', 'true');
-      localStorage.setItem('pomodoro_duration', duration);
+      localStorage.setItem(storagePrefix + 'endTime', endTime);
     }
-  }, [running, endTime, duration]);
+  }, [running, hasStarted, duration, endTime, storagePrefix]);
 
   const getRemainingSeconds = () => {
     return endTime ? Math.max(0, Math.floor((endTime - now) / 1000)) : duration;
@@ -57,7 +62,11 @@ function Pomodoro() {
     setHasStarted(false);
     setEndTime(null);
     setDuration(25 * 60);
-    localStorage.clear();
+
+    localStorage.removeItem(storagePrefix + 'endTime');
+    localStorage.removeItem(storagePrefix + 'running');
+    localStorage.removeItem(storagePrefix + 'hasStarted');
+    localStorage.removeItem(storagePrefix + 'duration');
   };
 
   const remaining = getRemainingSeconds();

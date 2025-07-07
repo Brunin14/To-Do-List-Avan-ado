@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../Context/AuthContext';
 import BackButton from '../Components/BackButton';
 import './Notes.css';
 
 function Notes() {
+  const { usuario } = useContext(AuthContext);
+  const storageKey = `notes_${usuario?.email || 'anonimo'}`;
+
   const [notes, setNotes] = useState(() => {
-    const saved = localStorage.getItem('notes');
+    const saved = localStorage.getItem(storageKey);
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -14,14 +18,14 @@ function Notes() {
 
   const saveNotes = (notesArray) => {
     setNotes(notesArray);
-    localStorage.setItem('notes', JSON.stringify(notesArray));
+    localStorage.setItem(storageKey, JSON.stringify(notesArray));
   };
 
   const addNote = () => {
     if (!newNote.trim()) return;
     const noteObj = {
-      text: newNote,
-      timestamp: new Date().toLocaleString('pt-BR')
+      text: newNote.trim(),
+      timestamp: new Date().toLocaleString('pt-BR'),
     };
     saveNotes([noteObj, ...notes]);
     setNewNote('');

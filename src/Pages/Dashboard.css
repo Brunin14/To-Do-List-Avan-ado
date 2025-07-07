@@ -80,6 +80,30 @@
   background-color: #0056b3;
 }
 
+.logout-button {
+  margin-top: 0px;
+  padding: 8px 20px;
+  background-color: #e74c3c;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #c0392b;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* espaço entre os botões */
+  margin-top: 20px;
+  align-items: center; /* centraliza horizontalmente os botões */
+}
+
 /* Responsivo */
 @media (max-width: 600px) {
   .stats-grid {
