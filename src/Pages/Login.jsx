@@ -7,25 +7,34 @@ function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [mensagem, setMensagem] = useState('');
+  const [loading, setLoading] = useState(false); // novo estado
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMensagem('');
 
-    const resposta = await fetch('https://backend-flask-u1dw.onrender.com/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, senha })
-    });
+    try {
+      const resposta = await fetch('https://backend-flask-u1dw.onrender.com/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha })
+      });
 
-    const data = await resposta.json();
+      const data = await resposta.json();
 
-    if (resposta.ok) {
-      login({ email });
-      navigate('/');
-    } else {
-      setMensagem(data.erro);
+      if (resposta.ok) {
+        login({ email });
+        navigate('/');
+      } else {
+        setMensagem(data.erro);
+        setLoading(false);
+      }
+    } catch (error) {
+      setMensagem('Erro na conexão. Tente novamente.');
+      setLoading(false);
     }
   };
 
@@ -35,7 +44,13 @@ function Login() {
         <h2>Login</h2>
         <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
         <input type="password" placeholder="Senha" value={senha} onChange={e => setSenha(e.target.value)} required />
-        <button type="submit">Entrar</button>
+
+        {loading ? (
+          <div className="spinner"></div> // spinner no lugar do botão
+        ) : (
+          <button type="submit">Entrar</button>
+        )}
+
         <p className="mensagem">{mensagem}</p>
         <p className="link-cadastro">
           Não tem conta?{' '}

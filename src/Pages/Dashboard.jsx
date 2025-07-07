@@ -66,7 +66,6 @@ function Dashboard({ usuario }) {
 
   return (
     <div className="dashboard-container">
-      <BackButton />
       <h1 className="dashboard-title">📊 Produtividade Avançada</h1>
       <p className="dashboard-subtitle">Resumo das suas atividades:</p>
 
